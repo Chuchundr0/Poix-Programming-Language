@@ -18,7 +18,7 @@ std::string TokenTypeToString(TokenType type) {
         case TokenType::NUMBER: return "NUMBER";
         case TokenType::EOF_TOKEN: return "EOF_TOKEN";
     };
-};
+}
 
 void Print(std::vector<Token> Source) {
 	for(int i = 0; i < Source.size(); ++i) {

@@ -21,6 +21,7 @@ private:
 		else {
 			if(Lexeme[0] == '"' && Lexeme.back() == '"') {
 				NewType = TokenType::STRING;
+				Lexeme = Lexeme.substr(1, Lexeme.length() - 2);	
 			}		
 			else {
 				try {
@@ -42,56 +43,77 @@ private:
 	}
 
 public:
-	std::vector<Token> Tokenize(const std::vector<std::string>& Source) {
+	std::vector<Token> Tokenize(const std::string Source) {
 		std::string CurrentToken = "";
-		bool InQuote = false;
 		int Line = 0;
 
-		for(int i = 0; i < Source.size(); ++i) {
-			Line = i;
-			for(char s : Source[i]) {
-				if(s == '"') {
-					InQuote = !InQuote;
+		for(size_t pos = 0; pos < Source.size(); ++pos) {
+			char sym = Source[pos];
 
-					if(InQuote) {
-						if(!CurrentToken.empty()) {
-							MakeNewToken(CurrentToken, Line);		
-						}
-						CurrentToken += s;
+			if(sym == '\n') {
+				Line++;
+			}
+
+			if(sym == '#') {
+				if(!CurrentToken.empty()) {
+					MakeNewToken(CurrentToken, Line);
+				}
+				
+				++pos;
+				for(; pos < Source.size(); ++pos) {
+					sym = Source[pos];
+
+					if(sym == '#') {
+						break;
+					}
+				}
+
+				continue;
+			}
+
+			if(sym == '"') {
+				if(!CurrentToken.empty()) {
+					MakeNewToken(CurrentToken, Line);
+				}
+
+				CurrentToken += sym;
+				++pos;
+				for(; pos < Source.size(); pos++) {
+					sym = Source[pos];
+
+					if(sym == '"') {
+						CurrentToken += sym;
+						break;
 					}
 					else {
-						CurrentToken += s;
-						MakeNewToken(CurrentToken, Line);
+						CurrentToken += sym;
 					}
-					continue;
-				}
-				if(InQuote) {
-					CurrentToken += s;
-					continue;
 				}
 
-				if(s == '+' || s == '-' || s == '*' || s == '/' || s == ')' || s == '(') {
-					if(!CurrentToken.empty()) {
-						MakeNewToken(CurrentToken, Line);
-					}
-					CurrentToken += s;
-					MakeNewToken(CurrentToken, Line);
-					continue;
-				}
-
-				if(isspace(s)) {
-					if(!CurrentToken.empty()) {
-						MakeNewToken(CurrentToken, Line);
-					}
-					continue;
-				}
-
-				CurrentToken += s;
+				continue;
 			}
 
-			if(!CurrentToken.empty()) {
+			if(sym == '+' || sym == '-' || sym == '*' || sym == '/' || sym == ')' || sym == '(') {
+				if(!CurrentToken.empty()) {
+ 					MakeNewToken(CurrentToken, Line);
+				}
+				CurrentToken += sym;
 				MakeNewToken(CurrentToken, Line);
+ 				continue;
 			}
+
+			if(isspace(sym) || sym == '\n') {
+ 				if(!CurrentToken.empty()) {
+ 					MakeNewToken(CurrentToken, Line);
+ 				}
+				continue;
+ 			}
+
+			CurrentToken += sym;
+ 		}
+
+		if(!CurrentToken.empty()) {
+			MakeNewToken(CurrentToken, Line);
 		}
 
 		Token EOFToken(" ", TokenType::EOF_TOKEN, CurrentPosition++, Line);

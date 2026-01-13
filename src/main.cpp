@@ -17,7 +17,8 @@ std::string TokenTypeToString(TokenType type) {
         case TokenType::STRING: return "STRING";
         case TokenType::NUMBER: return "NUMBER";
         case TokenType::EOF_TOKEN: return "EOF_TOKEN";
-    };
+		default: return "UNKNOWN";
+    }
 }
 
 void Print(std::vector<Token> Source) {
@@ -30,7 +31,7 @@ void Print(std::vector<Token> Source) {
 }
 
 int main(int argc, char* argv[]) {
-	if(argc < 1) {
+	if(argc < 2) {
 		std::cerr << "ERROR: Not enough files to compile: Exit." << std::endl;
 		return 1;
 	}

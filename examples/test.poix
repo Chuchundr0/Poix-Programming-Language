@@ -1,4 +1,4 @@
-#TEST PROGRAM#
-#this is a comment#
+#TEST PROGRAM
+#this is a comment
 
 console("result = " (12 + (12 / 2) - 12 * 1))

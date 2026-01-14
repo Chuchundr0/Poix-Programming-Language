@@ -63,14 +63,15 @@ public:
 				for(; pos < Source.size(); ++pos) {
 					sym = Source[pos];
 
-					if(sym == '#') {
+					if(sym == '\n') {
+						Line++;
 						break;
 					}
 				}
 
 				continue;
 			}
-
+	
 			if(sym == '"') {
 				if(!CurrentToken.empty()) {
 					MakeNewToken(CurrentToken, Line);
@@ -80,6 +81,10 @@ public:
 				++pos;
 				for(; pos < Source.size(); pos++) {
 					sym = Source[pos];
+
+					if(sym == '\n') {
+						Line++;
+					}
 
 					if(sym == '"') {
 						CurrentToken += sym;

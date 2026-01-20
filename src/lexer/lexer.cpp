@@ -22,7 +22,7 @@ private:
 			if(Lexeme[0] == '"' && Lexeme.back() == '"') {
 				NewType = TokenType::STRING;
 				Lexeme = Lexeme.substr(1, Lexeme.length() - 2);	
-			}		
+			}
 			else {
 				try {
 					int TestNumber = stoi(Lexeme);

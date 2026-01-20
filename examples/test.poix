@@ -1,4 +1,3 @@
-#TEST PROGRAM
-#this is a comment
+#test program
 
-console("result = " (12 + (12 / 2) - 12 * 1))
+console("10 + (10 - 10) = " + 10 + (10 - 10))
